@@ -1,6 +1,4 @@
-FFmpeg / FFprobe — GPL 静态构建（BtbN FFmpeg-Builds，未修改）
-版本：ffmpeg version N-128837-g986bab2b47-20261112 Copyright (c) 2000-2026 the FFmpeg developers
-许可：GPLv3，原文见同目录 LICENSE.txt
-构建来源：https://github.com/BtbN/FFmpeg-Builds/releases
-源码获取：https://github.com/FFmpeg/FFmpeg（版本行 N-<号>-g<提交> 即对应 commit）
-          构建脚本：https://github.com/BtbN/FFmpeg-Builds
+FFmpeg / FFprobe — GPL shared build (BtbN FFmpeg-Builds, unchanged)
+Source commit: 986bab2b47 (FFmpeg/FFmpeg)
+License: LICENSE.txt
+Vendor archive: https://github.com/FFmpeg-Builds/FFmpeg-Builds/releases/download/autobuild-2026-11-12-15-40/ffmpeg-N-128837-g986bab2b47-win64-gpl-shared.zip

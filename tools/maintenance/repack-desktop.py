@@ -10,7 +10,7 @@ import subprocess
 import sys
 
 root = Path(__file__).resolve().parents[2]
-source = root / "desktop"
+source = Path(sys.argv[2]).resolve() if len(sys.argv) == 3 else root / "desktop"
 header = {"files": {}}
 payload = bytearray()
 for path in sorted(source.iterdir()):
@@ -34,7 +34,7 @@ data = json.dumps(header, separators=(",", ":")).encode()
 inner = struct.pack("<I", len(data)) + data
 inner += b"\0" * (-len(inner) % 4)
 packed_header = struct.pack("<I", len(inner)) + inner
-archive = Path(sys.argv[1]).resolve() if len(sys.argv) == 2 else root / "resources/app.asar"
+archive = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else root / "resources/app.asar"
 packed = struct.pack("<II", 4, len(packed_header)) + packed_header + payload
 if archive.is_file() and archive.read_bytes() == packed:
     print("Desktop archive already matches the editable source.")

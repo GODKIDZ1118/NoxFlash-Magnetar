@@ -7,7 +7,7 @@
 (function () {
   'use strict';
 
-  var NOXFLASH_VERSION = 'NoxFlash_Magnetar V1.0';
+  var NOXFLASH_VERSION = 'NoxFlash_Magnetar V1.0.1';
 
   var MARK_LIGHT = '/static/images/logo_mark_light.png'; // 浅色主题用黑色版
   var MARK_DARK = '/static/images/logo_mark_dark.png';   // 深色主题用白色版

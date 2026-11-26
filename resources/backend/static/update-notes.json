@@ -1,9 +1,9 @@
 {
-  "version": "NoxFlash_Magnetar V1.0",
+  "version": "NoxFlash_Magnetar V1.0.1",
   "items": [
     {
       "type": "update",
-      "text": "Magnetar 首版。新增 Windows 安装包与软件内一键更新。"
+      "text": "精简 Windows 安装包。FFmpeg 与 FFprobe 改用同版本共享库，减少重复文件。"
     }
   ]
 }
