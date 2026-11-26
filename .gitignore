@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.env*
+*.pem
+/API/
+/data/
+/assets/
+/output/
+/split_jobs/
+history.json

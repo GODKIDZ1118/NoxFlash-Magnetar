@@ -1,0 +1,349 @@
+/* Floating Agent window */
+.cn-root #agent.ap2-agent:not(.full) {
+    position: absolute;
+    inset: auto;
+    left: var(--agent-window-x, auto);
+    top: var(--agent-window-y, var(--agent-window-default-y, 56px));
+    right: var(--agent-window-right, 12px);
+    width: min(var(--agent-w, 380px), calc(100% - 24px));
+    height: min(var(--agent-window-height, min(620px, 76%, calc(100% - 70px))), calc(100% - 24px));
+    margin: 0;
+    z-index: 56;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--panel);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: none;
+}
+.cn-root.has-win-controls #agent.ap2-agent:not(.full) {
+    /* Put the desktop inset in the initial position only. Drag coordinates already include it. */
+    --agent-window-default-y: calc(var(--cn-chrome-top, 16px) + 104px);
+    margin-top: 0;
+}
+.cn-root[data-w="narrow"].has-win-controls #agent.ap2-agent:not(.full) {
+    --agent-window-default-y: calc(var(--cn-chrome-top, 16px) + 48px);
+    top: var(--agent-window-y, var(--agent-window-default-y));
+}
+.cn-root[data-theme="dark"] #agent.ap2-agent:not(.full) {
+    background: var(--cn-control-bg, var(--panel));
+}
+.cn-root #agent.ap2-agent.closed {
+    margin: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: none;
+}
+.cn-root #agent.ap2-agent.full {
+    --agent-chat-width: 760px;
+    inset: 0;
+    width: auto;
+    padding: 0;
+    display: grid;
+    grid-template: "header" auto "chat" minmax(0, 1fr) "composer" auto / minmax(0, 1fr);
+    background: var(--panel);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+.cn-root.has-win-controls #agent.ap2-agent.full { padding-top: 0; }
+.cn-root #agent.ap2-agent.full .agent-window-titlebar {
+    grid-area: header;
+    height: 52px;
+}
+.cn-root #agent.ap2-agent.full .ap2-conv {
+    min-width: 0;
+    max-width: min(210px, 28vw);
+}
+.cn-root #agent.ap2-agent.full .ap2-scroller { grid-area: chat; }
+.cn-root #agent.ap2-agent.full .ap2-content,
+.cn-root #agent.ap2-agent.full .ap2-composer {
+    width: min(var(--agent-chat-width), calc(100% - 32px));
+}
+.cn-root #agent.ap2-agent.full .ap2-content { padding-inline: 0; }
+.cn-root #agent.ap2-agent.full .ap2-composer {
+    grid-area: composer;
+    margin: 0 auto 16px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: none;
+}
+.cn-root #agent.ap2-agent.full #aPrevWin {
+    position: absolute;
+    inset: 68px 16px auto auto;
+    width: min(320px, calc(100% - 32px));
+    z-index: 67;
+    border: 1px solid var(--line);
+    background: var(--card);
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    animation: none;
+}
+.cn-root #agent.ap2-agent.full #aPrevWin .aph {
+    cursor: default;
+    border-bottom: 1px solid var(--line);
+}
+.cn-root #agent.ap2-agent.full #aPrevWin canvas {
+    height: auto;
+    max-height: 32vh;
+    object-fit: contain;
+}
+.cn-root #agent.ap2-agent .ap2-viewport {
+    mask-image: none;
+    transition: none;
+}
+.cn-root #agent.ap2-agent.full #files {
+    top: 58px;
+    left: 12px;
+    transform: none;
+    max-height: min(440px, calc(100% - 74px));
+    overflow: auto;
+}
+.cn-root #agent.ap2-agent .agent-window-titlebar {
+    height: 42px;
+    flex: 0 0 42px;
+    padding-right: 10px;
+    border-bottom: 1px solid var(--line);
+}
+.cn-root #agent.ap2-agent [data-agent-drag] {
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-app-region: no-drag;
+}
+.cn-root .agent-window-controls {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+.cn-root .agent-window-controls .ib {
+    width: 28px;
+    height: 26px;
+    border-radius: 6px;
+    color: var(--fg2);
+    cursor: pointer;
+}
+.cn-root .agent-window-controls .ib:hover { background: var(--hover); color: var(--fg); }
+.cn-root .agent-window-controls #aClose:hover { background: var(--bad); color: #fff; }
+.cn-root #agent.ap2-agent .agent-window-actions {
+    height: 48px;
+    flex: 0 0 48px;
+    padding: 0 14px;
+    gap: 6px;
+    background: transparent;
+    box-shadow: none;
+}
+.cn-root #agent.ap2-agent .agent-window-actions .ap2-conv { max-width: min(210px, calc(100% - 122px)); }
+body.agent-window-moving {
+    user-select: none;
+}
+body.agent-window-moving #agent.ap2-agent:not(.full) {
+    will-change: translate;
+}
+body.agent-window-moving .cn-root #app,
+body.agent-window-moving .cn-root #app * {
+    cursor: grabbing !important;
+}
+#agent .agent-resize-handle {
+    position: absolute;
+    z-index: 9;
+    touch-action: none;
+}
+#agent:is(.closed, .full) .agent-resize-handle { display: none; }
+#agent .agent-resize-handle:is([data-edge="n"], [data-edge="s"]) {
+    inset-inline: 14px;
+    height: 7px;
+    cursor: ns-resize;
+}
+#agent .agent-resize-handle[data-edge="n"] { top: 0; height: 3px; }
+#agent .agent-resize-handle[data-edge="s"] { bottom: 0; }
+#agent .agent-resize-handle:is([data-edge="w"], [data-edge="e"]) {
+    inset-block: 14px;
+    width: 7px;
+    cursor: ew-resize;
+}
+#agent .agent-resize-handle[data-edge="w"] { left: 0; }
+#agent .agent-resize-handle[data-edge="e"] { right: 0; }
+#agent .agent-resize-handle:is([data-edge="nw"], [data-edge="ne"], [data-edge="sw"], [data-edge="se"]) {
+    width: 14px;
+    height: 14px;
+}
+#agent .agent-resize-handle[data-edge="nw"] { top: 0; left: 0; cursor: nwse-resize; }
+#agent .agent-resize-handle[data-edge="ne"] { top: 0; right: 0; cursor: nesw-resize; }
+#agent .agent-resize-handle[data-edge="sw"] { bottom: 0; left: 0; cursor: nesw-resize; }
+#agent .agent-resize-handle[data-edge="se"] { bottom: 0; right: 0; cursor: nwse-resize; }
+body.agent-resizing { user-select: none; }
+body:has(#pop, .model-flyout, .nv-gen-select) #agent .agent-resize-handle { pointer-events: none; }
+
+/* Agent composer menus use the canvas controls' palette and shared dropdown motion. */
+.cn-root #pop.agent-composer-pop.agent-composer-pop,
+.cn-root #agent-model-options.model-flyout-portal,
+.cn-root #modal.agent-composer-dialog > .modal {
+    background: var(--cn-control-bg, var(--panel)) !important;
+    color: var(--fg);
+    border: 1px solid var(--line);
+    border-radius: 13px;
+    box-shadow: var(--spring-menu-shadow, var(--glass-shadow)) !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+.cn-root #pop.agent-composer-pop.agent-composer-pop {
+    min-width: min(200px, calc(100vw - 16px));
+    max-width: calc(100vw - 16px);
+    padding: 6px;
+}
+.cn-root #pop.agent-composer-pop.ctx-pop {
+    min-width: min(252px, calc(100vw - 16px));
+}
+.cn-root #pop.agent-composer-pop.agent-composer-pop::after { display: none; }
+.cn-root #agent-model-options.model-flyout-portal { z-index: 81; }
+.cn-root :is(#pop.agent-composer-pop, #agent-model-options, #modal.agent-composer-dialog .modal) .mi {
+    min-height: 34px;
+    padding: 6px 9px;
+    border-radius: 9px;
+    color: var(--fg);
+}
+.cn-root :is(#pop.agent-composer-pop, #agent-model-options) .mi :is(.d, .k) {
+    color: var(--fg2);
+}
+.cn-root #modal.agent-composer-dialog {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+/* Shared surfaces for the composer and cards shown in the conversation. */
+.cn-root #agent.ap2-agent {
+    --agent-surface: var(--cn-control-bg, var(--card));
+    --agent-inset: color-mix(in srgb, var(--panel) 60%, var(--agent-surface));
+    --agent-card-radius: 13px;
+}
+.cn-root[data-theme="dark"] #agent.ap2-agent {
+    --agent-surface: var(--cn-control-bubble, var(--card));
+}
+.cn-root #agent.ap2-agent #aiBox,
+.cn-root #agent.ap2-agent :is(.message-card, .ap2-auth, .review-card, .studio-batch, .confirm, .ap2-selfcheck)[class] {
+    background: var(--agent-surface);
+    border: 1px solid var(--line);
+    border-radius: var(--agent-card-radius);
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+.cn-root #agent.ap2-agent #aiBox {
+    padding: 8px;
+    gap: 5px;
+    transition: border-color var(--d-quick) var(--e-std);
+}
+.cn-root #agent.ap2-agent #aiBox:focus-within {
+    border-color: color-mix(in srgb, var(--fg2) 45%, var(--agent-surface));
+}
+.cn-root #agent.ap2-agent #aiBox.is-drop-target {
+    background: color-mix(in srgb, var(--agent-surface) 92%, var(--solid));
+    border-color: var(--fg2);
+}
+.cn-root #agent.ap2-agent:not(.full) #aiBox:has(.ap2-auth) {
+    max-height: 65%;
+}
+.cn-root #agent.ap2-agent .ap2-input .ap2-md {
+    min-height: 46px;
+    padding: 7px 6px;
+}
+.cn-root #agent.ap2-agent .ap2-foot {
+    flex-shrink: 0;
+    padding: 5px 0 0;
+}
+.cn-root #agent.ap2-agent .ap2-foot :is(.ib, .ap2-pill, .ap2-send) {
+    border-radius: 9px;
+}
+.cn-root #agent.ap2-agent .ap2-foot :is(.ib, .ap2-pill):is(:hover, :focus-visible):not(:disabled):not(.voice-live) {
+    background: var(--cn-control-highlight, var(--hover));
+    color: var(--fg);
+}
+.cn-root #agent.ap2-agent .ap2-foot #aModel {
+    flex: 0 1 auto;
+    min-width: 0;
+}
+.cn-root #agent.ap2-agent .ap2-foot #aModel svg { flex: none; }
+.cn-root #agent.ap2-agent .ap2-foot .ap2-amodel { min-width: 0; }
+.cn-root #agent.ap2-agent .ap2-foot .ap2-send {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    box-shadow: none;
+}
+.cn-root #agent.ap2-agent .ap2-queue {
+    background: var(--agent-inset);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+}
+.cn-root #agent.ap2-agent .ap2-queue-hint { white-space: normal; }
+.cn-root #agent.ap2-agent .ap2-ctxrow .pm-chip:not(.off):not(.gone) {
+    background: var(--agent-inset);
+    border: 1px solid var(--line);
+}
+.cn-root #agent.ap2-agent .ap2-hello .ap2-sug {
+    width: 100%;
+    min-width: 0;
+    padding: 8px 10px;
+    gap: 8px;
+    background: var(--agent-surface);
+    border: 1px solid var(--line);
+    border-radius: var(--agent-card-radius);
+    box-shadow: none;
+}
+.cn-root #agent.ap2-agent .ap2-hello .ap2-sug:is(:hover, :focus-visible) {
+    background: color-mix(in srgb, var(--agent-surface) 94%, var(--solid));
+}
+.cn-root #agent.ap2-agent .ap2-hello .ap2-sug-ic {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+    border-radius: 8px;
+}
+.cn-root #agent.ap2-agent .message-card .mc-head {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--line);
+}
+.cn-root #agent.ap2-agent .message-card .mc-body { padding: 10px 12px; }
+.cn-root #agent.ap2-agent .message-card .mc-foot {
+    padding: 8px 12px 10px;
+    border-top: 1px solid var(--line);
+}
+.cn-root #agent.ap2-agent .message-card :is(.gen-sub, .gen-prompt, .gen-note, .mc-note, .mc-why) {
+    color: var(--fg2);
+}
+.cn-root #agent.ap2-agent .message-card :is(.gen-row, .plan-step, .gen-prompt-edit, [data-slot=questionnaire-choice]) {
+    background: var(--agent-inset);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+}
+.cn-root #agent.ap2-agent .message-card :is(.gen-row.is-pending, .plan-step:hover, [data-slot=questionnaire-choice]:is(:hover, [data-checked])) {
+    background: color-mix(in srgb, var(--agent-inset) 93%, var(--solid));
+}
+.cn-root #agent.ap2-agent .message-card :is(.gen-select, .pr-btn, [data-slot=questionnaire-input]) {
+    background: var(--agent-surface);
+    border: 1px solid var(--line);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+}
+.cn-root #agent.ap2-agent .message-card :is(.gen-select, .pr-btn, [data-slot=questionnaire-input]):focus-visible {
+    outline: 1px solid var(--fg2);
+    outline-offset: 1px;
+}
+.cn-root #agent.ap2-agent #aiBox .ap2-auth {
+    flex: 0 1 auto;
+    min-height: 0;
+    max-height: min(32vh, 260px);
+    overscroll-behavior: contain;
+}
+.cn-root #agent.ap2-agent .ap2-auth :is(.ap2-auth-chip, .ap2-auth-btn) { border-radius: 8px; }
+.cn-root #agent.ap2-agent .ap2-auth :is(.ap2-auth-usage, .ap2-auth-limit) { flex-wrap: wrap; }
+.cn-root #agent.ap2-agent .ap2-alert {
+    background: color-mix(in srgb, var(--agent-surface) 94%, var(--bad));
+    border: 1px solid color-mix(in srgb, var(--line) 70%, var(--bad));
+    border-radius: var(--agent-card-radius);
+}
+@media (prefers-reduced-motion: reduce) {
+    .cn-root #agent.ap2-agent #aiBox { transition: none; }
+}

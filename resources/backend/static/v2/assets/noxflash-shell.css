@@ -1,0 +1,735 @@
+/* ==========================================================================
+   NoxFlash 外壳皮肤 —— 参照「轻画」：左侧 72px 图标栏 + 白色圆角内容卡片
+   只在 V2 打包样式之后覆盖，不动任何 DOM 结构与事件
+   ========================================================================== */
+
+/* 尺寸全部按「轻画」窗口实测（1440x900）：
+   顶部窗口栏 48px、左侧栏 64px、内容卡片左沿贴住侧栏、右/下留 15px、圆角 16px */
+:root {
+  --nf-rail: 64px;
+  --nf-rail-open: 212px;    /* 展开宽度，匹配 Sidebar Collapse 的弹簧行程 */
+  --nf-card-r: 16px;        /* 内容卡片圆角 */
+  --nf-gap: 15px;           /* 卡片与右/下边的间距 */
+  --nf-tbh: 48px;           /* 顶部窗口栏高度 */
+  --nf-workspace-bg: #fdfdfd;
+  --cn-control-bg: #f1f1f2;
+  --cn-control-bubble: #e6e6e6;
+  --cn-control-text: #1d1d1f;
+  --cn-control-icon: #6e6e73;
+  --cn-control-highlight: rgb(29 29 31 / 14%);
+}
+
+html.theme-dark {
+  --nf-workspace-bg: #000;
+  --cn-control-bg: #242424;
+  --cn-control-bubble: #2f2f2f;
+  --cn-control-text: #f5f5f7;
+  --cn-control-icon: #98989d;
+  --cn-control-highlight: rgb(245 245 247 / 14%);
+}
+
+body .shell {
+  --nf-card-r: 16px;
+}
+
+/* 顶部窗口栏 48px（轻画实测）；画布模式（原顶部栏被卸载）也保持一致 */
+body .shell:not(.no-bar) {
+  --tbh: var(--nf-tbh) !important;
+}
+
+.shell {
+  background: var(--shell-bg) !important;
+}
+
+/* ---------------------------------------------------------------- 标题栏 */
+.tb {
+  height: var(--tbh) !important;
+  padding-left: 16px !important;
+  padding-right: 6px !important;
+}
+
+.tb .tb-brand {
+  height: var(--tbh);
+  -webkit-app-region: drag;
+  gap: 7px !important;
+}
+
+.tb .tb-brand svg,
+.tb .tb-brand img {
+  width: auto !important;
+  height: 17px !important;
+  display: block !important;
+}
+
+/* ------------------------------------------------------ 左侧 72px 图标栏 */
+.tb-nav {
+  position: fixed !important;
+  left: 0 !important;
+  top: var(--tbh) !important;
+  bottom: 0 !important;
+  width: var(--nf-rail) !important;
+  height: auto !important;
+  transform: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  gap: 1px !important;
+  padding: 5px 0 6px !important;
+  z-index: 58 !important;
+  background: transparent !important;
+  -webkit-app-region: no-drag !important;
+}
+
+.tb-nav .tb-nav-item {
+  width: 40px !important;
+  height: 36px !important;
+  min-width: 40px !important;
+  min-height: 36px !important;
+  padding: 0 !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0 !important;
+  flex: 0 0 auto !important;
+  color: var(--ink-2) !important;
+  background: transparent !important;
+  transition: background .15s ease, color .15s ease;
+}
+
+.tb-nav .tb-nav-item > span:not(.nf-rail-label) {
+  display: none !important;
+}
+
+.tb-nav .tb-nav-item svg {
+  width: 17px !important;
+  height: 17px !important;
+}
+
+.tb-nav .tb-nav-item:hover {
+  background: var(--fill-1) !important;
+  color: var(--ink) !important;
+}
+
+.tb-nav .tb-nav-item.on {
+  background: var(--fill-2) !important;
+  color: var(--ink) !important;
+}
+
+/* 原来的胶囊浮动选中底不要了 */
+.tb-pill {
+  display: none !important;
+}
+
+/* 侧栏顶部的品牌标记 —— 轻画在同一位置放了个 24px 的小 logo */
+.nf-rail-logo {
+  width: 40px;
+  height: 30px;
+  flex: 0 0 auto;
+  margin: 0 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.nf-rail-logo img {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  display: block;
+}
+
+/* 顶部加号 —— 与轻画一致：40x36 白底圆角 + 轻阴影 */
+.nf-newtab {
+  width: 40px;
+  height: 36px;
+  flex: 0 0 auto;
+  margin: 0 0 5px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 12px;
+  background: var(--stage-bg);
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 0 0 0 .5px var(--separator), 0 1px 2px rgba(0, 0, 0, .06), 0 4px 10px -4px rgba(0, 0, 0, .14);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+
+.nf-newtab:hover {
+  box-shadow: 0 0 0 .5px var(--separator), 0 2px 5px rgba(0, 0, 0, .09), 0 8px 18px -6px rgba(0, 0, 0, .18);
+}
+
+.nf-newtab:active {
+  transform: scale(.95);
+}
+
+/* 深色主题下加号也要浮起来（轻画是白色按钮，深色里要给一档更亮的底） */
+html.theme-dark .nf-newtab {
+  background: #232326;
+  color: #fafafa;
+  box-shadow: 0 0 0 .5px rgba(255, 255, 255, .12), 0 2px 6px rgba(0, 0, 0, .45), 0 8px 18px -8px rgba(0, 0, 0, .6);
+}
+
+html.theme-dark .nf-newtab:hover {
+  background: #2b2b2f;
+}
+
+.nf-newtab svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ------------------------------------------------- 底部工具（主题 / 设置） */
+.tb-right {
+  position: fixed !important;
+  left: 0 !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: var(--nf-gap) !important;
+  transform: none !important;
+  width: var(--nf-rail) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 1px !important;
+  z-index: 58 !important;
+}
+
+.tb-right .tb-btn {
+  width: 40px !important;
+  height: 36px !important;
+  border-radius: 12px !important;
+  color: var(--ink-2) !important;
+  transition: background .15s ease, color .15s ease;
+}
+
+.tb-right .tb-btn:hover {
+  background: var(--fill-1) !important;
+  color: var(--ink) !important;
+}
+
+/* 外框留在 body，所有页面和画布共用其中这一块圆角工作区。 */
+.shell > .body {
+  padding: var(--nf-tbh) var(--nf-gap) var(--nf-gap) var(--nf-rail-live, var(--nf-rail)) !important;
+  background: var(--cn-control-bg) !important;
+}
+
+.shell > .body > .stage {
+  border-radius: var(--nf-card-r) !important;
+  background: var(--nf-workspace-bg) !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+  isolation: isolate;
+  clip-path: inset(0 round var(--nf-card-r));
+}
+
+/* 页面里自己的底色不要盖住卡片白底 */
+.stage .hp,
+.stage .ls,
+.stage .mk,
+.stage .me,
+.stage .cl {
+  background: transparent !important;
+}
+
+/* 轻画是纯平底色，去掉顶部/底部光晕层 */
+.tb-fx,
+.bt-fx {
+  display: none !important;
+}
+
+/* 页面内的世界坐标容器在卡片里略收一点边距 */
+.stage > * {
+  min-width: 0;
+}
+
+/* -------------------------------- 画布模式下的独立侧栏（原顶部栏被卸载后顶上） */
+/* 画布模式也要留出顶部窗口栏：原生最小化/最大化/关闭住在这一条上，
+   画布项目自己的按钮（分享、额度、主题、设置）留在画布卡片右上角 */
+body .shell.no-bar {
+  --tbh: var(--nf-tbh) !important;
+}
+
+/* 注意：这个侧栏挂在 body 上，拿不到 .shell 里的 --tbh，只能写死 48px */
+.nf-rail-fallback {
+  top: 48px !important;
+  padding-top: 0 !important;
+  z-index: 59 !important;
+}
+
+/* ---------------------------------------------------------------- 标题栏
+   与「轻画」同一套窗口架构：窗口无边框，这条标题栏是网页自己画的。
+   左边品牌、右边自绘的最小化/最大化/关闭；中间空白整条都能拖窗口。 */
+body .shell .tb { display: none !important; }   /* Vue 原来那条顶栏不再显示 */
+
+.nf-brandbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 70;
+  -webkit-app-region: drag;
+  pointer-events: none;
+  background: var(--cn-control-bg);
+}
+
+.nf-brandbar .nf-brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 6px;
+  margin-right: auto;   /* 品牌紧跟左侧按钮，别被 space-between 推到中间 */
+}
+
+/* 窗口栏最左边的「收起/展开侧栏」 */
+.nf-collapse {
+  width: 28px;
+  height: 28px;
+  margin-left: 18px;
+  border: 0;
+  padding: 0;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--ink-3);
+  pointer-events: auto;
+  -webkit-app-region: no-drag;
+  cursor: default;
+}
+
+.nf-collapse svg { width: 15px; height: 15px; display: block; }
+.nf-collapse:hover { background: var(--fill-2); color: var(--ink); }
+
+.nf-brandbar img {
+  height: 15px;
+  width: auto;
+  display: block;
+}
+
+.nf-brandbar span {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: .2px;
+  color: var(--ink);
+}
+
+.nf-wincontrols {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 10px;
+  pointer-events: auto;
+  -webkit-app-region: no-drag;
+}
+
+.nf-winctl {
+  width: 34px;
+  height: 30px;
+  border: 0;
+  border-radius: 9px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--cn-control-icon);
+  cursor: default;
+  transition: background-color .12s ease, color .12s ease;
+}
+
+.nf-winctl svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+  stroke-linecap: round;
+}
+
+.nf-winctl:hover,
+.nf-winctl:focus-visible {
+  background: var(--cn-control-highlight);
+  color: var(--cn-control-text);
+}
+
+.nf-brandbar.morph-ready .nf-winctl:not(.nf-winctl-close):hover:not(:focus-visible) {
+  background: transparent;
+}
+
+.nf-winctl-close:hover,
+.nf-winctl-close:focus-visible {
+  background: #c42b1c;
+  color: #fff;
+}
+
+.nf-winctl:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+}
+
+.nf-rail-fallback .tb-nav-item,
+.nf-rail-right .tb-btn {
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.nf-rail-fallback .tb-nav-item.on {
+  color: var(--ink) !important;
+}
+
+.nf-rail-fallback .nf-newtab {
+  margin-bottom: 8px;
+}
+
+.nf-rail-right {
+  z-index: 59 !important;
+}
+
+/* 侧栏底部（主题 / 设置）与导航图标同尺寸 */
+.nf-rail-right .tb-btn svg,
+.nf-rail-fallback .tb-nav-item svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* --------------------------------------------------------- 侧栏展开 / 收起
+   收起 = 只有图标；展开 = 图标 + 名称。两种状态下图标的位置完全不动，
+   只有侧栏宽度和右边露出来的文字在变。 */
+.nf-rail-fallback,
+.nf-rail-right {
+  box-sizing: border-box;
+  width: var(--nf-rail-live, var(--nf-rail)) !important;
+  align-items: flex-start !important;
+  padding-left: 12px !important;
+  overflow: clip;
+}
+
+.nf-rail-highlight {
+  position: absolute;
+  top: 0;
+  left: 12px;
+  right: 12px;
+  height: 36px;
+  border-radius: 12px;
+  background: var(--cn-control-highlight);
+  pointer-events: none;
+  transform: translate3d(0, var(--nf-rail-highlight-y, 0px), 0);
+  transition: transform .4s ease-out;
+  /* The reference spring (380, 28) sampled at 25 ms intervals. */
+  transition-timing-function: linear(0, .112, .3202, .5378, .7218, .8577, .9472, .9989, 1.0236, 1.0313, 1.0294, 1.0234, 1.0165, 1.0103, 1.0056, 1.0024, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nf-rail-highlight { transition: none; }
+}
+
+.nf-rail-fallback .tb-nav-item,
+.nf-rail-right .tb-btn {
+  position: relative;
+  width: calc(var(--nf-rail-live, var(--nf-rail)) - 24px) !important;
+  justify-content: flex-start !important;
+  padding-left: 11.5px !important;
+}
+
+.nf-rail-fallback .tb-nav-item:hover,
+.nf-rail-right .tb-btn:hover {
+  background: var(--cn-control-highlight) !important;
+}
+
+.nf-rail-fallback .tb-nav-item.on:hover {
+  background: transparent !important;
+}
+
+.tb-nav.nf-rail-fallback {
+  background: var(--cn-control-bg) !important;
+}
+
+.nf-rail-fallback .tb-nav-item:not(.on):not(:hover),
+.nf-rail-right .tb-btn:not(:hover) {
+  color: var(--cn-control-icon) !important;
+}
+
+.nf-brandbar .nf-collapse {
+  color: var(--cn-control-icon);
+}
+
+html .nf-brandbar .nf-collapse:hover {
+  background: transparent;
+  color: var(--cn-control-text);
+}
+
+.nf-rail-fallback.morph-ready .tb-nav-item:hover,
+.nf-rail-right.morph-ready .tb-btn:hover {
+  background: transparent !important;
+}
+
+.nf-rail-fallback .nf-rail-label,
+.nf-rail-right .nf-rail-label {
+  display: block !important;
+  position: absolute;
+  left: 46px;
+  top: 50%;
+  transform: translate(var(--nf-label-x, -10px), -50%);
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: .2px;
+  color: var(--ink-2);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+}
+
+html.nf-rail-open .nf-rail-fallback .tb-nav-item.on .nf-rail-label {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* 窗口按钮统一由标题栏那一套负责；画布视图里页面自己画的那组（浅灰小方块）藏掉 */
+.cc,
+.cc-drag {
+  display: none !important;
+}
+
+/* 标题栏左边的版本号 */
+.nf-ver {
+  margin-left: 2px !important;
+}
+
+.nf-ver span {
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  letter-spacing: .3px;
+  color: var(--ink-3) !important;
+}
+
+/* 侧栏顶部 logo 的名称 */
+.nf-rail-name {
+  display: none;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .2px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.nf-rail-fallback .nf-rail-logo {
+  width: 40px;
+  justify-content: flex-start !important;
+  padding-left: 8px !important;
+  position: relative;
+}
+
+.nf-rail-fallback .nf-rail-name {
+  display: block;
+  position: absolute;
+  left: 46px;
+  opacity: 0;
+  transform: translateX(var(--nf-label-x, -10px));
+}
+
+/* ------------------------------------------------------------ 背景：纯黑 + 去掉会动的光雾
+   .nv-veil 是首页那层会动的 WebGL 画布（雾状光带），老板要求删掉。 */
+.nv-veil, .nv-veil.on { display: none !important; }
+
+html.theme-dark .shell,
+html.theme-dark .shell.desk-web { --shell-bg: #000; --stage-bg: #000; }
+
+/* 浅色画布和外框同为浅灰，留一道很轻的边线来读出四角。 */
+html:not(.theme-dark) .route-canvas .stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgb(0 0 0 / 6%);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* 模板卡片的圆角：图片/视频直接铺满卡片，卡片自身的 overflow 有时裁不掉底部两角，
+   这里三重保险——卡片自身圆角 + 子元素继承圆角 + clip-path 硬裁。 */
+.hp-card,
+.hp-grid .hp-card {
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  clip-path: inset(0 round 20px);
+  -webkit-mask-image: -webkit-radial-gradient(#fff, #000);
+}
+
+.hp-card > img,
+.hp-card > video,
+.hp-card > picture,
+.hp-card > picture > img {
+  border-radius: 20px !important;
+}
+/* Sidebar asset library */
+.am.stage-page {
+  --am-gap: 12px;
+  --am-surface: var(--cn-control-bg);
+  --am-inset: color-mix(in srgb, var(--am-surface) 68%, var(--nf-workspace-bg));
+  display: grid;
+  grid-template:
+    "heading heading heading" auto
+    "categories library detail" minmax(0, 1fr)
+    / clamp(152px, 12vw, 180px) minmax(0, 1fr) clamp(224px, 19vw, 280px);
+  gap: var(--am-gap);
+  padding: 12px clamp(12px, 1.4vw, 22px) 14px;
+  color: var(--cn-control-text);
+}
+.am.stage-page.is-media {
+  grid-template-areas: "heading heading heading" "sources library detail" "categories library detail";
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+.am.stage-page .am-cols { display: contents; }
+.am-library-header {
+  grid-area: heading;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 36px;
+}
+.am-library-header h1 {
+  margin: 0;
+  white-space: nowrap;
+  font: 600 22px/1.25 var(--font-sans);
+}
+.am.stage-page .am-seg3 {
+  min-width: min(198px, 100%);
+  border: 1px solid var(--separator);
+  background: var(--am-surface);
+}
+.am.stage-page .am-seg3 button.on {
+  background: var(--cn-control-highlight);
+  color: var(--cn-control-text);
+  box-shadow: none;
+}
+.am.stage-page :is(.am-src, .am-nav, .am-main, .am-det) {
+  border: 1px solid var(--separator);
+  border-radius: 13px;
+  background: var(--am-surface);
+  box-shadow: none;
+}
+.am.stage-page .am-src { grid-area: sources; padding: 8px; }
+.am.stage-page .am-srch { padding: 4px 8px; color: var(--ink-3); }
+.am.stage-page .am-cols > .am-nav { grid-area: categories; margin: 0; padding: 10px 8px; }
+.am.stage-page .am-nav > .am-ph { min-height: 0; padding: 2px 8px; margin-bottom: 8px; }
+.am.stage-page .am-nav > .am-ph .pt span { display: none; }
+.am.stage-page :is(.am-nav, .am-src) .am-tr {
+  min-height: 34px;
+  border-radius: 9px;
+}
+.am.stage-page :is(.am-nav, .am-src) .am-tr:is(:hover, :focus-visible, .is-on) {
+  background: var(--cn-control-highlight);
+  color: var(--cn-control-text);
+}
+.am.stage-page .am-main {
+  grid-area: library;
+  gap: 7px;
+  overflow: hidden;
+  padding: 12px;
+}
+.am.stage-page .am-ct { flex-wrap: wrap; align-items: center; gap: 6px; }
+.am.stage-page .am-ct .ch { flex: 1 1 100%; margin-bottom: 3px; }
+.am.stage-page .am-ct .ch b { font-size: 17px; font-weight: 600; }
+.am.stage-page .am-ct .nv-field {
+  flex: 1 1 150px;
+  width: auto;
+  min-width: 120px;
+  max-width: none;
+}
+.am.stage-page :is(.am-ct, .am-fbar, .am-kbar, .am-mbar, .am-det) :is(.nv-field, .nv-btn:not(.primary):not(.danger), .am-sel, .nv-seg) {
+  border-radius: 9px;
+  background: var(--am-inset);
+  box-shadow: none;
+}
+.am.stage-page :is(.am-ct, .am-fbar, .am-kbar, .am-mbar, .am-det) :is(.nv-btn, .am-sel, .nv-seg button):hover:not(:disabled) {
+  background-color: var(--cn-control-highlight);
+  color: var(--cn-control-text);
+}
+.am.stage-page :is(.am-kbar, .am-fbar) .nv-seg button.is-on {
+  background: var(--cn-control-highlight);
+  color: var(--cn-control-text);
+  box-shadow: none;
+}
+.am.stage-page .am-scroll { padding: 4px 2px 12px; margin: 0 -2px; }
+.am.stage-page .am-grid { grid-template-columns: repeat(auto-fill, minmax(min(144px, 100%), 1fr)); gap: 10px; }
+.am.stage-page .am-grp { gap: 9px; }
+.am.stage-page .am-gh { padding: 4px 0 7px; border-bottom: 1px solid var(--separator); }
+.am.stage-page .am-gh span { overflow: hidden; text-overflow: ellipsis; }
+.am.stage-page .am-grid .am-card,
+.am.stage-page .am-plist .am-pr {
+  border: 1px solid var(--separator);
+  border-radius: 12px;
+  background: var(--am-inset);
+  box-shadow: none;
+}
+.am.stage-page .am-grid .am-card {
+  padding: 5px 5px 8px;
+  gap: 6px;
+}
+.am.stage-page .am-grid .am-card:is(:hover, .act, .pick),
+.am.stage-page .am-plist .am-pr:is(:hover, .on) {
+  border-color: color-mix(in srgb, var(--cn-control-text) 42%, var(--am-inset));
+}
+.am.stage-page .am-grid .am-card .am-cm { border-radius: 8px; box-shadow: none; transform: none; }
+.am.stage-page .am-grid .am-card :is(.nm, .mt) { margin-inline: 4px; }
+.am.stage-page .am-grid .am-card .mt { margin-top: -3px; }
+.am.stage-page .am-det { grid-area: detail; display: flex; }
+.am.stage-page .am-det > .am-ph { flex-wrap: wrap; padding: 12px 12px 8px; margin: 0; border-bottom: 1px solid var(--separator); }
+.am.stage-page .am-det > .am-ph .pt { min-width: 92px; }
+.am.stage-page .am-dsc { padding: 12px; gap: 12px; }
+.am.stage-page .am-det :is(.am-dm, .am-sec) { background: var(--am-inset); border-radius: 9px; }
+
+@media (min-width: 931px) {
+  .am.stage-page.is-media { row-gap: 0; }
+  .am.stage-page.is-media .am-library-header { margin-bottom: var(--am-gap); }
+  .am.stage-page.is-media .am-src {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .am.stage-page.is-media .am-cols > .am-nav {
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+}
+@media (min-width: 1240px) {
+  .am.stage-page .am-ct .ch {
+    flex: 0 1 184px;
+    margin: 0 6px 0 0;
+  }
+}
+
+@media (max-width: 930px) {
+  .am.stage-page {
+    grid-template: "heading heading" auto "categories library" minmax(0, 1fr) "detail detail" auto / 166px minmax(0, 1fr);
+    overflow-y: auto;
+  }
+  .am.stage-page.is-media {
+    grid-template-areas: "heading heading" "sources library" "categories library" "detail detail";
+    grid-template-rows: auto auto minmax(220px, 1fr) auto;
+  }
+  .am.stage-page .am-main { min-height: 360px; }
+  .am.stage-page .am-det { min-height: 220px; }
+  .am.stage-page .am-dm { max-height: 240px; }
+}
+@media (max-width: 620px) {
+  .am.stage-page,
+  .am.stage-page.is-media {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas: "heading" "sources" "categories" "library" "detail";
+  }
+  .am.stage-page:not(.is-media) { grid-template-areas: "heading" "categories" "library" "detail"; }
+  .am.stage-page .am-nav { max-height: 160px; }
+  .am.stage-page .am-scroll { max-height: 55dvh; }
+}

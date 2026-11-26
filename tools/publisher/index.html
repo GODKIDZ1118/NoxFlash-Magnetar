@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NoxFlash更新工具</title>
+<style>
+:root{color-scheme:light;--shell:#f1f1f2;--page:#fdfdfd;--panel:#fff;--text:#1d1d1f;--muted:#606067;--line:#e7e7e9;--fill:#ebecee;--accent:#0485f7;--strong:#006ac7;--error:#b42318}
+:root[data-theme=dark]{color-scheme:dark;--shell:#242424;--page:#151515;--panel:#202020;--text:#f5f5f7;--muted:#a9a9b0;--line:#363638;--fill:#303032;--strong:#65b5fd;--error:#ff837a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--shell);color:var(--text);font:14px/1.5 "Geist","Microsoft YaHei UI",system-ui,sans-serif}
+button,input,textarea{font:inherit}
+.top{height:48px;display:flex;align-items:center;padding:0 18px;gap:9px;font-weight:650;font-size:13px}
+.top img{width:22px;height:22px;object-fit:contain;filter:invert(1)}
+:root[data-theme=dark] .top img{filter:none}
+.shell{display:grid;grid-template-columns:212px minmax(0,1fr);min-height:calc(100dvh - 48px)}
+aside{padding:11px 12px 16px;display:flex;flex-direction:column;justify-content:space-between;gap:24px}
+.rail{padding:10px 13px;background:var(--fill);border-radius:9px;font-weight:650}
+.theme{align-self:flex-start}
+main{border:1px solid var(--line);border-radius:16px;margin:0 15px 15px 0;background:var(--page);padding:clamp(22px,4vw,48px)}
+.content{max-width:1120px;margin:0 auto}
+h1,h2,p{margin:0}
+h1{font-size:28px;letter-spacing:-.025em}
+h2{font-size:16px}
+p.help{color:var(--muted);margin-top:5px}
+header.heading{display:flex;justify-content:space-between;align-items:start;gap:14px;margin-bottom:25px}
+.version{white-space:nowrap;color:var(--muted);padding:5px 10px;border:1px solid var(--line);border-radius:7px;font-size:12px}
+.grid{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(230px,1fr);gap:16px;align-items:start}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;min-width:0}
+.card h2{margin-bottom:15px}
+label{display:block;margin:14px 0 6px;font-weight:550}
+input,textarea{width:100%;border:1px solid var(--line);border-radius:8px;background:var(--page);color:var(--text);padding:9px 11px}
+textarea{resize:vertical;min-height:125px}
+input:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+button{border:1px solid transparent;border-radius:8px;background:var(--fill);color:var(--text);padding:8px 12px;cursor:pointer}
+button.primary{background:#0075da;color:white;font-weight:650}
+button:hover:not(:disabled){filter:brightness(.94)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+button:disabled{opacity:.48;cursor:default}
+.item{border-top:1px solid var(--line);padding:12px 0;color:var(--muted);overflow-wrap:anywhere}
+.item:last-child{padding-bottom:0}
+.item strong{display:block;color:var(--text);font-size:13px;margin-bottom:3px}
+.log{margin-top:16px}
+pre{margin:0;background:var(--page);border:1px solid var(--line);border-radius:8px;color:var(--muted);padding:12px;min-height:85px;max-height:230px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.65 "Cascadia Code","Microsoft YaHei UI",monospace}
+#status{min-height:21px;margin-top:10px;color:var(--strong)}
+#status.error{color:var(--error)}
+a{color:var(--strong)}
+@media(max-width:900px){.shell{grid-template-columns:145px minmax(0,1fr)}.grid{grid-template-columns:1fr}}
+@media(max-width:560px){.shell{display:block}aside{flex-direction:row;padding:0 13px 9px}main{margin:0 10px 10px;padding:18px}.card{padding:16px}.heading{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div class="top"><img src="logo.png" alt="">NoxFlash更新工具</div>
+<div class="shell">
+  <aside><div class="rail" aria-current="page">更新与发布</div><button class="theme" type="button" id="theme">深色模式</button></aside>
+  <main>
+    <div class="content">
+      <header class="heading">
+        <div><h1>更新与发布</h1><p class="help">生成 Windows 安装包，并向已安装的画布发送版本更新。</p></div>
+        <div class="version" id="current">正在读取当前版本</div>
+      </header>
+      <div class="grid">
+        <section class="card">
+          <h2>发布信息</h2>
+          <form id="release">
+            <label for="version">版本号</label>
+            <input id="version" name="version" inputmode="decimal" placeholder="1.0" required>
+            <label for="notes">更新说明</label>
+            <textarea id="notes" name="notes" maxlength="4000" placeholder="告诉用户这次更新了什么"></textarea>
+            <div class="actions">
+              <button type="submit" class="primary" id="build">生成安装包</button>
+              <button type="button" id="open" disabled>打开安装包目录</button>
+              <button type="button" id="publish" disabled>发布到 GitHub</button>
+            </div>
+            <p id="status" role="status" aria-live="polite"></p>
+            <a id="link" hidden target="_blank" rel="noopener">查看 GitHub 发布</a>
+          </form>
+        </section>
+        <section class="card">
+          <h2>发布内容</h2>
+          <div class="item"><strong>Windows 安装包</strong>新用户下载后直接安装。</div>
+          <div class="item"><strong>软件内更新</strong>画布发现新版后，用户点一次即可下载安装。</div>
+          <div class="item"><strong>发布范围</strong>只收录程序文件。API 配置、密钥、画布、素材和生成记录留在本机。</div>
+          <div class="item"><strong>GitHub 仓库</strong><span id="repo">正在读取</span></div>
+        </section>
+      </div>
+      <section class="card log"><h2>操作记录</h2><pre id="log">等待操作</pre></section>
+    </div>
+  </main>
+</div>
+<script>
+const $ = (id) => document.getElementById(id);
+let state = {};
+let initialized = false;
+let sending = false;
+const statuses = {
+  build: '正在生成安装包…', publish: '正在发布…', built: '安装包已生成',
+  published: '已发布到 GitHub', failed: '操作失败，请查看下方记录',
+};
+function controls() {
+  const built = (state.built || []).includes($('version').value.trim());
+  const busy = sending || state.busy;
+  $('build').disabled = busy || built;
+  $('publish').disabled = busy || !built || (state.status === 'published' && state.version === $('version').value.trim());
+  $('open').disabled = busy || !built;
+}
+async function refresh() {
+  try {
+    const response = await fetch('status', {cache:'no-store'});
+    if (!response.ok) throw new Error('更新工具连接中断');
+    state = await response.json();
+    if (!initialized) {
+      $('version').value = state.current;
+      initialized = true;
+    }
+    $('current').textContent = '当前版本 V' + state.current;
+    $('repo').textContent = state.repository;
+    $('log').textContent = state.messages.join('\n') || '等待操作';
+    $('status').textContent = statuses[state.status] || '';
+    $('status').className = state.status === 'failed' ? 'error' : '';
+    $('link').hidden = !state.link;
+    if (state.link) $('link').href = state.link;
+    controls();
+  } catch (error) {
+    $('status').textContent = error.message;
+    $('status').className = 'error';
+  }
+}
+async function submit(action) {
+  if (!$('release').reportValidity()) return;
+  sending = true;
+  controls();
+  try {
+    const response = await fetch(action, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({
+      version:$('version').value.trim(), notes:$('notes').value.trim(),
+    })});
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error);
+    await refresh();
+  } catch (error) {
+    $('status').textContent = error.message;
+    $('status').className = 'error';
+  } finally {
+    sending = false;
+    controls();
+  }
+}
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  $('theme').textContent = theme === 'dark' ? '浅色模式' : '深色模式';
+  localStorage.setItem('noxflash-publisher-theme', theme);
+}
+applyTheme(localStorage.getItem('noxflash-publisher-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+$('theme').onclick = () => applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+$('version').oninput = controls;
+$('release').onsubmit = (event) => { event.preventDefault(); submit('build'); };
+$('open').onclick = () => submit('open');
+$('publish').onclick = () => submit('publish');
+refresh();
+setInterval(refresh, 1200);
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN" class="studio-route-booting">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NoxFlash</title>
+    <!-- 首帧就套上主题，避免浅→深闪一下 -->
+    <script>(function(){try{var t=localStorage.getItem('studio_theme')||localStorage.getItem('canvas_theme')||'light';if(t==='dark'){document.documentElement.classList.add('theme-dark','studio-theme-dark');document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
+    <!-- 与旧外壳共用主题 / 缩放 / 多语言：同一套 localStorage 键和 postMessage 协议，旧页面嵌进来无感 -->
+    <script src="/static/js/theme.js"></script>
+    <script src="/static/js/i18n.js"></script>
+    <!-- 积分：全局余额 + SSE 实时刷新（账户菜单里展示，SSE 事件 noxflash-credits） -->
+    <script src="/static/js/credits.js?v=1.0.143.1792847980"></script>
+    <!-- 账户入口已并入 V2 左侧栏（Sidebar.vue），不再加载旧右上胶囊 user-menu.js -->
+  <script defer src="/static/v2/assets/noxflash-shell.js?v=24c4b42ea38f"></script>
+  <script type="module" crossorigin src="/static/v2/assets/index-DAYrz1qq.js?v=447fcc01fb3d"></script>
+    <link rel="stylesheet" href="/static/css/studio-scrollbars.css?v=13fdef7c9edd">
+    <script defer src="/static/js/studio-scrollbars.js?v=161b1dc52366"></script>
+  <link rel="stylesheet" crossorigin href="/static/v2/assets/index-cXOLKKe4.css?v=23b88d900fa3">
+  <!-- NoxFlash 外壳皮肤：左侧 72px 图标栏 + 白色圆角内容卡片（参照「轻画」） -->
+  <link rel="stylesheet" href="/static/v2/assets/noxflash-shell.css?v=107dfd515c4f">
+    <link rel="stylesheet" href="/static/css/canvas-morph-tooltip.css?v=c677607862d1">
+    <script defer src="/static/js/canvas-morph-tooltip.js?v=ee121fa4382e"></script>
+    <link rel="stylesheet" href="/static/css/glide.css?v=af74c216be2c">
+    <link rel="stylesheet" href="/static/css/spring-dropdown.css?v=bd8bb42e1fcf">
+    <script defer src="/static/js/shared/glide.js?v=b8ea72004afe"></script>
+    <script defer src="/static/js/shared/spring-dropdown.js?v=47eaaa556e36"></script>
+    <script defer src="/static/js/shared/dropdown.js?v=1aa6b06b58e7"></script>
+    <link rel="stylesheet" href="/static/css/inspiration-library.css?v=6d0fadf2b26e">
+    <script defer src="/static/js/inspiration-library.js?v=4158be573f10"></script>
+    <link rel="stylesheet" href="/static/css/browser-page.css?v=d8af02c82af8">
+    <script defer src="/static/js/browser-page.js?v=26af704c840a"></script>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+</html>

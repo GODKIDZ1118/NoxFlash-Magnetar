@@ -1,0 +1,9 @@
+{
+  "version": "NoxFlash_Magnetar V1.0",
+  "items": [
+    {
+      "type": "update",
+      "text": "Magnetar 首版。新增 Windows 安装包与软件内一键更新。"
+    }
+  ]
+}

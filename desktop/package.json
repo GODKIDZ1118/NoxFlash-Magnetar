@@ -1,0 +1,9 @@
+{
+  "name": "noxflash-desktop",
+  "version": "2.0.7",
+  "description": "NoxFlash 无限画布 AI 创作平台 — 桌面客户端 (Electron)",
+  "main": "main.js",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "private": true,
+  "productName": "NoxFlash"
+}
