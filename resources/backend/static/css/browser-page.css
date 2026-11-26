@@ -1,0 +1,243 @@
+nox-browser {
+  --nfb-control: var(--cn-control-bg);
+  --nfb-hover: var(--cn-control-highlight);
+  --nfb-line: var(--separator);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  color: var(--cn-control-text);
+  font: inherit;
+}
+nox-browser [hidden], nox-browser-settings [hidden] { display: none !important; }
+
+.nfb-chrome {
+  display: grid;
+  gap: 5px;
+  margin: 8px 10px;
+  padding: 5px;
+  border: 1px solid var(--nfb-line);
+  border-radius: var(--radius-lg, 12px);
+  background: var(--nfb-control);
+}
+.nfb-tabbar, .nfb-toolbar, .nfb-nav-controls {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 3px;
+}
+.nfb-tabs {
+  display: flex;
+  gap: 3px;
+  min-width: 0;
+  overflow-x: auto;
+  
+}
+.nfb-tab {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  width: clamp(118px, 18vw, 195px);
+  padding: 0 3px;
+  border-radius: 9px;
+  color: var(--ink-3);
+  transition: background-color .15s, color .15s;
+}
+.nfb-tab.is-active {
+  background: var(--cn-control-bubble);
+  color: var(--cn-control-text);
+}
+.nfb-tab:hover:not(.is-active) { background: var(--fill-2); }
+.nfb-tab-label, .nfb-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+.nfb-icon {
+  width: 30px;
+  height: 30px;
+  color: var(--cn-control-icon);
+  transition: background-color .15s, color .15s;
+}
+.nfb-tab .nfb-icon { width: 23px; height: 23px; }
+.nfb-tab .nfb-icon svg { width: 13px; height: 13px; }
+.nfb-tab-label {
+  flex: 1;
+  justify-content: flex-start;
+  min-width: 0;
+  height: 30px;
+  gap: 7px;
+  padding-inline: 7px;
+  font-size: 12px;
+}
+.nfb-tab-label svg { flex: none; }
+.nfb-icon:hover:not(:disabled) { background: var(--nfb-hover); color: var(--cn-control-text); }
+.nfb-nav-controls.morph-ready .nfb-icon:hover { background: transparent; }
+.nfb-icon:disabled { opacity: .38; cursor: default; }
+.nfb-tab-label span, .nfb-history strong, .nfb-history button > span > span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.nfb-address, .nfb-setting-form input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  height: 32px;
+  min-width: 0;
+  border: 1px solid var(--separator);
+  border-radius: 9px;
+  padding: 0 10px;
+  background: var(--solid);
+  color: var(--ink-3);
+  transition: border-color .15s;
+}
+.nfb-address:focus-within, .nfb-setting-form input:focus-visible { border-color: var(--ink-3); }
+.nfb-address svg { flex: none; }
+.nfb-address input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+}
+.nfb-content { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+.nfb-content webview { position: absolute; inset: 0; display: flex; width: 100%; height: 100%; }
+.nfb-home-setup, .nfb-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: 100%;
+  padding: 16px 16px 60px;
+  text-align: center;
+}
+.nfb-error h2 { margin: 12px 0 0; font-size: 19px; font-weight: 600; }
+.nfb-error p { margin: 8px 0 18px; color: var(--ink-3); }
+.nfb-home-setup .nv-btn { border: 1px solid var(--nfb-line); }
+.nfb-status {
+  position: absolute;
+  z-index: 1;
+  top: 96px;
+  left: 10px;
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 9px;
+  background: var(--cn-control-bubble);
+}
+nox-browser-settings { display: block; }
+.nfb-setting-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px;
+  width: min(250px, 42vw);
+}
+.nfb-setting-form input { width: 100%; font: 400 12px/1 var(--font-sans); color: var(--ink); }
+.nfb-feedback { grid-column: 1 / -1; margin: 0; color: var(--ink-3); font-size: 11px; }
+.nfb-feedback:empty { display: none; }
+#nfb-history-dialog {
+  box-sizing: border-box;
+  width: min(680px, calc(100% - 32px));
+  max-height: min(660px, calc(100% - 32px));
+  padding: 0;
+  border: 1px solid var(--separator);
+  border-radius: 22px;
+  background: var(--solid);
+  box-shadow: var(--shadow-dialog);
+  color: var(--ink);
+  overflow: hidden;
+}
+#nfb-history-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  animation: nv-dialog-in var(--duration-slow) var(--ease-sheet) both;
+}
+#nfb-history-dialog::backdrop { background: var(--scrim); }
+.nfb-history-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--separator);
+}
+.nfb-history-head h2 { flex: 1; margin: 0; font-size: 16px; font-weight: 600; }
+.nfb-history-head .nfb-icon:hover { background: var(--cn-control-highlight); }
+.nfb-history {
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 6px 16px 16px;
+  color: var(--ink-3);
+  font-size: 12px;
+}
+.nfb-history h3 {
+  margin: 12px 0 6px;
+  padding-inline: 10px;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
+}
+.nfb-history section + section {
+  border-top: 1px solid var(--separator);
+  margin-top: 10px;
+}
+.nfb-history-row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  border-radius: 9px;
+}
+.nfb-history-row:has(input:checked) { background: var(--fill-1); }
+.nfb-history-choice {
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.nfb-history-choice input {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: inherit;
+}
+.nfb-history button {
+  display: grid;
+  align-items: start;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 8px;
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.nfb-history button:hover { background: var(--fill-2); }
+.nfb-history button > span { display: grid; gap: 2px; }
+.nfb-history strong { color: var(--ink); font-weight: 500; }
+.nfb-history time { font-size: 11px; font-variant-numeric: tabular-nums; }
+.nfb-history-feedback { margin: 8px 16px 0; color: var(--ink-2); font-size: 12px; }
+.nfb-history-empty { margin: 36px 0; text-align: center; }
+@media (prefers-reduced-motion: reduce) {
+  nox-browser *, nox-browser-settings * { transition: none !important; }
+  #nfb-history-dialog[open] { animation: none; }
+}

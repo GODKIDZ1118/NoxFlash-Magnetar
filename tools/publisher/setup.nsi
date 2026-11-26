@@ -5,7 +5,7 @@ OutFile "${OUTPUT}"
 InstallDir "$LOCALAPPDATA\Programs\NoxFlash-Magnetar"
 InstallDirRegKey HKCU "Software\NoxFlash\Magnetar" "InstallDir"
 RequestExecutionLevel user
-SetCompressor zlib
+SetCompressor /SOLID lzma
 !include "MUI2.nsh"
 !include "FileFunc.nsh"
 !insertmacro MUI_PAGE_DIRECTORY

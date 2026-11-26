@@ -1,0 +1,208 @@
+.nf-inspiration,
+.nfi-dialog {
+    --nfi-ink: var(--fg, var(--ink, #232427));
+    --nfi-muted: var(--fg2, var(--ink-2, #62656d));
+    --nfi-panel: var(--cn-control-bg, var(--raised, #f8f8f9));
+    --nfi-line: color-mix(in srgb, currentColor 15%, transparent);
+    --nfi-hover: color-mix(in srgb, currentColor 9%, transparent);
+    color: var(--nfi-ink);
+    font: inherit;
+}
+
+:is(html.dark, html.theme-dark, html[data-theme="dark"], [data-theme="dark"]) :is(.nf-inspiration, .nfi-dialog) {
+    --nfi-ink: var(--fg, #eeeef0);
+    --nfi-muted: var(--fg2, #b0b0b8);
+    --nfi-panel: var(--cn-control-bg, var(--raised, #242427));
+}
+
+.nf-inspiration { display: block; width: 100%; min-width: 0; }
+.nf-inspiration [hidden] { display: none !important; }
+.nfi-heading, .nfi-tools, .nfi-actions, .nfi-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.nfi-heading { justify-content: space-between; margin-bottom: 12px; }
+.nfi-heading h2 { font-size: 20px; margin: 0; }
+.nfi-tools input { flex: 1 1 160px; min-width: 0; }
+.nf-inspiration :is(button, select, input), .nfi-close {
+    min-height: 34px;
+    padding: 5px 10px;
+    border: 1px solid var(--nfi-line);
+    border-radius: 9px;
+    color: inherit;
+    background: transparent;
+    font: inherit;
+}
+.nf-inspiration button, .nfi-close { cursor: pointer; }
+.nf-inspiration button:disabled { cursor: default; opacity: .55; }
+.nf-inspiration button:is(:hover, [aria-pressed="true"]), .nfi-close:hover { background: var(--nfi-hover); }
+.nf-inspiration button.nfi-primary {
+    background: var(--accent, #0485f7);
+    border-color: transparent;
+    color: var(--on-accent, #101827);
+}
+.nfi-status, .nfi-meta { font-size: 12px; color: var(--nfi-muted); }
+.nfi-status { margin: 10px 0; }
+.nfi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(150px, 100%), 1fr));
+    gap: 10px;
+}
+.nf-inspiration button.nfi-card {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    gap: 5px;
+    padding: 0 0 8px;
+    overflow: hidden;
+    text-align: start;
+}
+.nfi-card :is(strong, .nfi-meta) {
+    margin: 0 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.nfi-card strong { font-size: 13px; }
+.nfi-cover {
+    display: grid;
+    position: relative;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--nfi-hover);
+    color: var(--nfi-muted);
+    font-size: 12px;
+}
+.nfi-cover img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.nfi-sentinel { height: 1px; }
+.nfi-case {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 16px;
+    margin-top: 12px;
+}
+.nfi-case > :is(img, video) {
+    width: 100%;
+    max-height: min(58vh, 550px);
+    object-fit: contain;
+    border-radius: 9px;
+    background: var(--nfi-hover);
+}
+.nfi-copy h3 { margin: 0 0 8px; font-size: 16px; }
+.nfi-links { font-size: 12px; }
+.nfi-links a { color: inherit; text-decoration: underline; }
+.nfi-copy .nfi-actions { margin-top: 10px; }
+.nfi-copy pre {
+    max-height: min(34vh, 340px);
+    overflow: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font: inherit;
+    font-size: 13px;
+    padding: 12px;
+    border-radius: 9px;
+    background: var(--nfi-hover);
+}
+.nfi-dialog {
+    position: fixed;
+    inset: var(--nfi-top, auto) auto var(--nfi-bottom, 12px) var(--nfi-left, 12px);
+    width: min(860px, calc(100vw - 24px));
+    max-width: none;
+    max-height: min(74vh, var(--nfi-height, 74vh));
+    box-sizing: border-box;
+    margin: 0;
+    border: 1px solid var(--nfi-line);
+    border-radius: 13px;
+    padding: 15px;
+    background: var(--nfi-panel);
+    box-shadow: 0 12px 38px #0003;
+}
+.nfi-dialog::backdrop { background: transparent; }
+.nfi-dialog .nfi-heading { padding-right: 40px; }
+.nfi-close { position: absolute; top: 15px; right: 15px; font-size: 18px; }
+
+.nfi-home .hp-tpl-head h2 { font-size: 15px; }
+.nfi-home .nfi-home-tools { flex: 1; min-width: min(100%, 340px); }
+.nfi-home .hp-tpl-search { flex: 0 1 220px; }
+.nfi-home .hp-tpl-search input { min-height: 0; padding: 0; }
+.nfi-home .hp-tabs button { min-height: 28px; }
+.nfi-home :is(select, .nfi-refresh, .nfi-categories button) {
+    min-height: 30px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 15px;
+    color: var(--ink-3);
+    background: var(--hp-glass);
+    font-size: 12px;
+}
+.nfi-home .nfi-status { margin: 0 0 10px; }
+.nfi-home .hp-card > img { position: absolute; inset: 0; }
+.nfi-home .hp-card > .t { pointer-events: none; }
+.nfi-home .hp-card > .t b {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+.nfi-home button.nfi-home-hit {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: transparent;
+}
+.nfi-home button.nfi-home-hit:focus-visible {
+    outline: 2px solid white;
+    outline-offset: -4px;
+}
+.nfi-home .hp-card button.nfi-card-star {
+    position: absolute;
+    z-index: 3;
+    top: 10px;
+    right: 10px;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    min-height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 9px;
+    color: #fff;
+    background: #171717a8;
+    backdrop-filter: blur(12px);
+}
+.nfi-home .hp-card button.nfi-card-star:hover { background: #171717d4; }
+.nfi-card-star svg, .nfi-detail-star svg { width: 17px; height: 17px; display: block; }
+.nfi-card-star[aria-pressed="true"] svg,
+.nfi-detail-star[aria-pressed="true"] svg { fill: currentColor; }
+.nfi-folder, .nfi-category-form { display: flex; align-items: center; gap: 8px; }
+.nfi-category-form { flex-wrap: wrap; }
+.nfi-categories { margin-bottom: 12px; }
+.nfi-categories input { flex: none; width: min(150px, 100%); }
+.nfi-page .hp-inner[data-v-09b8dd64] { padding-top: 35px; }
+.nfi-page .nfi-heading h2 { font-size: 22px; }
+.nfi-home .nfi-home-preview {
+    inset: 0;
+    margin: auto;
+    max-height: min(88vh, 760px);
+    padding: 18px;
+}
+.nfi-home-preview::backdrop { background: #0005; backdrop-filter: blur(4px); }
+.nfi-home-preview .nfi-case { margin-top: 14px; }
+
+@media (max-width: 620px) {
+    .nfi-case { grid-template-columns: 1fr; }
+}

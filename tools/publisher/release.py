@@ -50,6 +50,10 @@ def owned_files():
         'resources/backend/config/openclaw.json',
         'resources/backend/server/store_data/curation.json',
     ]
+    static = ROOT / 'resources/backend/static'
+    paths += [file.relative_to(ROOT).as_posix() for file in static.rglob('*')
+              if file.is_file() and file.suffix.lower() in {'.js', '.css', '.html', '.woff2'}
+              and file.relative_to(static).parts[0] in {'js', 'css', 'canvas', 'v2', 'vendor'}]
     return sorted({name for name in paths if '/__pycache__/' not in name
                    and not name.startswith(OMIT_PREFIXES) and name != 'resources/app.asar'})
 
@@ -333,19 +337,30 @@ def publish(out, log=print):
         target = urllib.parse.urlparse(release['upload_url'].split('{', 1)[0])
         if target.scheme != 'https' or target.hostname != 'uploads.github.com':
             raise ValueError('GitHub 上传地址无效')
+        size = file.stat().st_size
+        def chunks(fd):
+            sent, next_report = 0, 5
+            for block in iter(lambda: fd.read(1024 * 1024), b''):
+                yield block
+                sent += len(block)
+                percent = sent * 100 // size
+                if size > 10 * 1024 * 1024 and percent >= next_report:
+                    log(f'安装包上传 {percent}%')
+                    next_report = percent + 5
+
         connection = http.client.HTTPSConnection(target.hostname, timeout=120)
         try:
             with file.open('rb') as fd:
-                connection.request('POST', target.path + '?' + urllib.parse.urlencode({'name': file.name}), fd,
+                connection.request('POST', target.path + '?' + urllib.parse.urlencode({'name': file.name}), chunks(fd),
                                    {**headers, 'Content-Type': 'application/octet-stream',
-                                    'Content-Length': str(file.stat().st_size)})
+                                    'Content-Length': str(size)})
                 response = connection.getresponse()
                 response.read()
                 if response.status != 201:
                     raise ValueError(f'GitHub 安装包上传失败（{response.status}）')
         finally:
             connection.close()
-    result = api('PATCH', release_route, {'draft': False, 'make_latest': 'true'})
+    result = api('PATCH', release_route, {'draft': False, 'make_latest': 'true', 'target_commitish': commit})
     log('已发布 ' + result['html_url'])
     return result['html_url']
 

@@ -2882,13 +2882,35 @@ async function installMagnetarUpdate(release) {
       if (saved !== true) throw new Error('画布仍在保存或保存失败。请确认画布已保存后再更新。');
     }
     const installDir = path.dirname(process.execPath);
-    await new Promise((resolve, reject) => {
+    const installProcess = await new Promise((resolve, reject) => {
       const child = spawn(installer, ['/S', '/UPDATE', '/D=' + installDir], {
         detached: true, stdio: 'ignore', windowsVerbatimArguments: true,
       });
       child.once('error', reject);
-      child.once('spawn', () => { child.unref(); resolve(); });
+      child.once('spawn', () => resolve(child));
     });
+    try {
+      // The installer needs both the Electron and PyInstaller process trees to release their files.
+      const runningBackend = backendProc;
+      if (runningBackend?.pid && runningBackend.exitCode === null) {
+        backendStopExpected = true;
+        const taskkill = path.join(process.env.SystemRoot || 'C:/Windows', 'System32', 'taskkill.exe');
+        await new Promise((resolve, reject) => {
+          execFile(taskkill, ['/F', '/T', '/PID', String(runningBackend.pid)], {
+            windowsHide: true, timeout: 15000,
+          }, (error) => {
+            if (error) reject(new Error('后端仍在运行。请结束正在执行的任务后再试。'));
+            else resolve();
+          });
+        });
+        backendProc = null;
+      }
+    } catch (error) {
+      installProcess.kill();
+      backendStopExpected = false;
+      throw error;
+    }
+    installProcess.unref();
     installer = null;
     isQuitting = true;
     app.quit();

@@ -1,0 +1,49 @@
+.image-node .node-body:has(> .node-generation-progress) { position: relative; }
+.node-body:has(> .node-generation-progress) .gen-stage__status { display: none; }
+.node-generation-progress {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    color: var(--fg, var(--text));
+}
+.node-generation-progress-chip {
+    display: grid;
+    justify-items: center;
+    gap: 4px;
+}
+.node-generation-progress-ring {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+}
+.node-generation-progress-ring > * { grid-area: 1 / 1; }
+.node-generation-progress-ring svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+.node-generation-progress-track { opacity: .17; }
+.node-generation-progress-range { transition: stroke-dashoffset .4s linear; }
+.node-generation-progress[data-finishing] .node-generation-progress-range { transition: none; }
+.node-generation-progress[data-indeterminate] .node-generation-progress-ring svg {
+    animation: node-generation-spin .8s linear infinite;
+}
+.node-generation-progress-value {
+    font-size: 9px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+.node-generation-progress-label { font-size: 10px; line-height: 1.2; white-space: nowrap; font-variant-numeric: tabular-nums; }
+@keyframes node-generation-spin {
+    from { rotate: 0deg; }
+    to { rotate: 360deg; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .node-generation-progress[data-indeterminate] .node-generation-progress-ring svg { animation-duration: 2s !important; }
+    .node-generation-progress-range { transition: none; }
+}

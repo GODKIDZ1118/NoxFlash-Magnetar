@@ -1,0 +1,62 @@
+/* Shared by the app shell and its embedded pages. */
+@layer studio-scrollbars {
+    :root {
+        --studio-scrollbar-size: 8px;
+        --studio-scrollbar-thumb: color-mix(in srgb, currentColor 36%, transparent);
+        --studio-scrollbar-hover: color-mix(in srgb, currentColor 54%, transparent);
+    }
+
+    @media (forced-colors: none) {
+        @supports selector(::-webkit-scrollbar) {
+            /* Non-auto standard colors suppress the Chromium scrollbar parts. */
+            :where(*) { scrollbar-color: auto !important; }
+
+            ::-webkit-scrollbar {
+                width: var(--studio-scrollbar-size) !important;
+                height: var(--studio-scrollbar-size) !important;
+            }
+
+            ::-webkit-scrollbar-button {
+                display: none !important;
+                width: 0 !important;
+                height: 0 !important;
+            }
+
+            ::-webkit-scrollbar,
+            ::-webkit-scrollbar-track,
+            ::-webkit-scrollbar-track-piece,
+            ::-webkit-scrollbar-corner {
+                background: transparent !important;
+                border: 0 !important;
+                box-shadow: none !important;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: transparent !important;
+                border: 1px solid transparent !important;
+                border-radius: 5px !important;
+                background-clip: padding-box !important;
+                box-shadow: none !important;
+            }
+            ::-webkit-scrollbar-thumb:vertical { min-height: 24px !important; }
+            ::-webkit-scrollbar-thumb:horizontal { min-width: 24px !important; }
+
+            [data-studio-scrolling]::-webkit-scrollbar-thumb {
+                background-color: var(--studio-scrollbar-thumb) !important;
+            }
+
+            [data-studio-scroll-hover]::-webkit-scrollbar-thumb {
+                background-color: var(--studio-scrollbar-hover) !important;
+            }
+        }
+
+        @supports not selector(::-webkit-scrollbar) {
+            :where(*) {
+                scrollbar-width: thin;
+                scrollbar-color: transparent transparent !important;
+            }
+            [data-studio-scrolling] { scrollbar-color: var(--studio-scrollbar-thumb) transparent !important; }
+            [data-studio-scroll-hover] { scrollbar-color: var(--studio-scrollbar-hover) transparent !important; }
+        }
+    }
+}

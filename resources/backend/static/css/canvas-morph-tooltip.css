@@ -1,0 +1,92 @@
+.mt-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.mt-layer.mt-portal {
+    position: fixed;
+    inset: auto;
+    z-index: 75;
+}
+
+.mt-portal .mt-glow {
+    position: absolute;
+    border-radius: 9px;
+    background: var(--mt-highlight);
+}
+
+.mt-below .mt-tip {
+    top: calc(100% + 12px);
+    bottom: auto;
+    transform-origin: 50% -40%;
+}
+
+.mt-below .mt-tail {
+    top: calc(100% + 8px);
+    bottom: auto;
+}
+
+.mt-right .mt-tip,
+.mt-right .mt-tail {
+    top: 0;
+    bottom: auto;
+    left: calc(100% + 12px);
+}
+
+.mt-right .mt-tip {
+    transform-origin: 0 50%;
+}
+
+.mt-right .mt-tail {
+    left: calc(100% + 8px);
+}
+
+.mt-tip,
+.mt-tail {
+    position: absolute;
+    left: 0;
+    background: var(--mt-bubble);
+    color: var(--mt-text);
+    will-change: transform;
+}
+
+.mt-tip {
+    bottom: calc(100% + 12px);
+    height: 34px;
+    border-radius: 8px;
+    overflow: hidden;
+    transform-origin: 50% 140%;
+}
+
+.mt-tail {
+    bottom: calc(100% + 8px);
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+}
+
+.mt-label {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    height: 34px;
+    width: max-content;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    opacity: 0;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.mt-label kbd {
+    font: inherit;
+    font-size: 11px;
+    padding: 3px 5px;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--solid) 12%, transparent);
+}
